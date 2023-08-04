@@ -1,7 +1,7 @@
 import json
 from src.DataAccess.DataAccess import execute_query_with_params, execute_query
 
-class URL:
+class URLService:
 	def convert_to_entity(row: tuple):
 		db_object = {
 			"id": str(row[0]),
@@ -36,7 +36,7 @@ class URL:
 		parsed_urls = []
 
 		for row in result:
-			parsed_url = URL.convert_to_entity(row)
+			parsed_url = URLService.convert_to_entity(row)
 			parsed_urls.append(parsed_url)
 
 		return parsed_urls
