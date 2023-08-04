@@ -1,0 +1,46 @@
+import psycopg2
+import psycopg2.extras
+from settings import DB_NAME, USER_NAME, PASSWORD, HOST, PORT
+
+psycopg2.extras.register_uuid()
+
+def db_connect():
+	return psycopg2.connect(
+		database=DB_NAME,
+		user=USER_NAME,
+		password=PASSWORD,
+		host=HOST,
+		port=PORT
+	)
+
+def execute_query(query: str, hasResult = None):
+	result = None
+
+	connection = db_connect()
+	cursor = connection.cursor()
+
+	cursor.execute(query)
+
+	if (bool(hasResult)):
+		result = cursor.fetchall()
+
+	connection.commit()
+	connection.close()
+
+	return result
+
+def execute_query_with_params(query: str, params: list, hasResult = None):
+	result = None
+
+	connection = db_connect()
+	cursor = connection.cursor()
+
+	cursor.execute(query, params)
+
+	if (bool(hasResult)):
+		result = cursor.fetchall()
+
+	connection.commit()
+	connection.close()
+
+	return result
