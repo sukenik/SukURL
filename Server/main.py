@@ -1,5 +1,6 @@
 from fastapi import FastAPI, responses
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 from src.DataAccess.InitDB import init_db
 from src.schema.URLService import URLService
 from src.Middlewares import validate_tiny_url
@@ -8,6 +9,16 @@ load_dotenv()
 init_db()
 
 app = FastAPI()
+
+origins = ['*']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 @app.get('/')
 def read_all():

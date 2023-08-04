@@ -1,6 +1,7 @@
 import { hot } from 'react-hot-loader'
 import React, { useRef, useState } from 'react'
 import { Card, Form, Button, Alert, Container } from 'react-bootstrap'
+import useCreateUrl from './Hooks/useCreateUrl'
 
 const App: React.FC = () => {
     const urlRef = useRef<HTMLInputElement>(null)
@@ -15,7 +16,7 @@ const App: React.FC = () => {
         setTinyUrlError('')
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         resetErrors()
 
@@ -33,6 +34,7 @@ const App: React.FC = () => {
         try {
             resetErrors()
             setIsLoading(true)
+            await useCreateUrl(url, tinyUrl, setTinyUrlError)
         } catch {
             setTinyUrlError('Failed to create url')
             setIsLoading(false)
