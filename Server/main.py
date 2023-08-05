@@ -23,8 +23,8 @@ app.add_middleware(
 )
 
 @app.get('/my-urls')
-def read_all():
-    return UrlService.get_all()
+def read_all(limit: int, offset: int):
+    return UrlService.get_all(limit, offset)
 
 @app.get('/url/{tiny_url}')
 def read_url(req: Request):

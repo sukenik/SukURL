@@ -4,17 +4,16 @@ import { endpoint } from '../index'
 import { Card, Container, Button } from 'react-bootstrap'
 import UrlsList from './UrlsList'
 import { useNavigate } from 'react-router-dom'
-
-export interface URLEntity {
-	tinyUrl: string
-	url: string
-}
+import { MY_URLS_LIMIT_NUM, UrlEntity } from '../Utils'
+import PaginationOptions from './PaginationOptions'
 
 const MyUrlsPage: React.FC = () => {
-	const [urls, setUrls] = useState<URLEntity[]>([])
+	const [urls, setUrls] = useState<UrlEntity[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [offset, setOffset] = useState<number>(0)
+
 	const navigate = useNavigate()
-	
+
 	const handleBack = () => {
 		navigate(-1)
 	}
@@ -22,7 +21,9 @@ const MyUrlsPage: React.FC = () => {
 	useEffect(() => {
 		setIsLoading(true)
 
-		axios.get(`${endpoint}/my-urls`).then((response) => {
+		axios.get(
+			`${endpoint}/my-urls?limit=${MY_URLS_LIMIT_NUM}&offset=${offset}`
+		).then((response) => {
 			setUrls(response.data.map((url: string) => (
 				JSON.parse(url)
 			)))
@@ -30,7 +31,7 @@ const MyUrlsPage: React.FC = () => {
 		})
 
 		return () => setIsLoading(false)
-	}, [])
+	}, [offset])
 
 	return (
         <Container
@@ -42,6 +43,13 @@ const MyUrlsPage: React.FC = () => {
                     <Card.Body>
                         <h2 className='text-center mb-4'>{'📃 My URLs'}</h2>
                         <UrlsList urls={urls} isLoading={isLoading} />
+						{!isLoading &&
+							<PaginationOptions
+								urls={urls}
+								offset={offset}
+								setOffset={setOffset}
+							/>
+						}
                     </Card.Body>
                 </Card>
 				<Button
