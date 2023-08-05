@@ -11,7 +11,7 @@ class UrlService:
 		parsed_object = json.dumps(db_object)
 		return parsed_object
 
-	def create(url_text: str, url: str):
+	def create(tiny_url: str, url: str):
 		query = '''
 			INSERT INTO public."URL"(
 				"TINY_URL", "URL"
@@ -20,7 +20,7 @@ class UrlService:
 			RETURNING "TINY_URL";
 		'''
 
-		result = execute_query_with_params(query, [url_text, url], True)[0]
+		result = execute_query_with_params(query, [tiny_url, url], True)[0]
 
 		return { 'tinyUrl': result[0] }
 

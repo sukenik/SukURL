@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Card, Container, Button } from 'react-bootstrap'
 import ActiveForm from './Components/ActiveForm'
-import CompletedForm from './Components/CompletedFrom'
+import CompletedForm from './Components/CompletedForm'
 import { useNavigate } from 'react-router-dom'
 
 const App: React.FC = () => {
