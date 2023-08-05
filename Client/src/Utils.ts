@@ -6,3 +6,10 @@ export const isValidUrl = (urlString: string) => {
 		return false
 	}
 }
+
+export interface UrlEntity {
+	tinyUrl: string
+	url: string
+}
+
+export const MY_URLS_LIMIT_NUM = 5

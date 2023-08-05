@@ -24,13 +24,14 @@ class UrlService:
 
 		return { 'tinyUrl': result[0] }
 
-	def get_all():
+	def get_all(limit: int, offset: int):
 		query = '''
 			SELECT "TINY_URL", "URL"
-			FROM public."URL";
+			FROM public."URL"
+			LIMIT %s OFFSET %s;
 		'''
 
-		result = execute_query(query, True)
+		result = execute_query_with_params(query, [limit, offset], True)
 
 		parsed_urls = []
 
