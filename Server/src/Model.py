@@ -1,7 +1,5 @@
 from pydantic import BaseModel
-from uuid import UUID
 
-class URLEntity(BaseModel):
-    id: UUID
-    urlText: str
+class UrlEntity(BaseModel):
     tinyUrl: str
+    url: str

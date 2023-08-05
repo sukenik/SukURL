@@ -1,33 +1,32 @@
 import json
 from src.DataAccess.DataAccess import execute_query_with_params, execute_query
 
-class URLService:
+class UrlService:
 	def convert_to_entity(row: tuple):
 		db_object = {
-			"id": str(row[0]),
-			"urlText": row[1],
-			"tinyUrl": str(row[2])
+			'tinyUrl': str(row[0]),
+			'url': row[1]
 		}
 
 		parsed_object = json.dumps(db_object)
 		return parsed_object
 
-	def create(url_text: str, tiny_url: str):
+	def create(tiny_url: str, url: str):
 		query = '''
 			INSERT INTO public."URL"(
-				"URL_TEXT", "TINY_URL"
+				"TINY_URL", "URL"
 			)
 			VALUES (%s, %s)
 			RETURNING "TINY_URL";
 		'''
 
-		result = execute_query_with_params(query, [url_text, tiny_url], True)[0]
+		result = execute_query_with_params(query, [tiny_url, url], True)[0]
 
 		return { 'tinyUrl': result[0] }
 
 	def get_all():
 		query = '''
-			SELECT "ID", "URL_TEXT", "TINY_URL" 
+			SELECT "TINY_URL", "URL"
 			FROM public."URL";
 		'''
 
@@ -36,7 +35,7 @@ class URLService:
 		parsed_urls = []
 
 		for row in result:
-			parsed_url = URLService.convert_to_entity(row)
+			parsed_url = UrlService.convert_to_entity(row)
 			parsed_urls.append(parsed_url)
 
 		return parsed_urls
@@ -50,3 +49,18 @@ class URLService:
 
 		result = execute_query_with_params(query, [tiny_url], True)[0]
 		return bool(result[0])
+
+	def get_url_by_tiny(tiny_url):
+		query = '''
+			SELECT "URL"
+			FROM public."URL"
+			WHERE "TINY_URL" = %s; 
+		'''
+
+		result = execute_query_with_params(query, [tiny_url], True)
+
+		if (result):
+			first_row = result[0]
+			return first_row[0]
+
+		return []
