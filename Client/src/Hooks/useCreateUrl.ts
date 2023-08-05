@@ -9,7 +9,7 @@ const useCreateUrl = async (
 ) => {
 	const response = await axios.put(
 		endpoint,
-		{ tinyUrl, url }
+		{ tiny_url: tinyUrl, url }
 	)
 	.catch(error => {
 		if (error.response) {

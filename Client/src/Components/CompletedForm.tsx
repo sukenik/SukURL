@@ -1,6 +1,5 @@
 import React from 'react'
-import { Form, Button, ButtonToolbar, ButtonGroup } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { Form, Button, Alert } from 'react-bootstrap'
 
 interface iProps {
 	url: string
@@ -9,11 +8,6 @@ interface iProps {
 }
 
 const CompletedForm: React.FC<iProps> = ({ url, tinyUrl, setCreatedTinyUrl }: iProps) => {
-    const navigate = useNavigate()
-
-    const handleMyUrlsClick = () => {
-		navigate('/my-urls')
-    }
 
 	const handleToActive = () => {
 		setCreatedTinyUrl(false)
@@ -29,6 +23,7 @@ const CompletedForm: React.FC<iProps> = ({ url, tinyUrl, setCreatedTinyUrl }: iP
 				<Form.Label className='mt-2'>{'🪄 SukURL'}</Form.Label>
 				<Form.Control className='mb-2' readOnly={true} value={tinyUrl} />
 			</Form.Group>
+			<Alert variant='success'>{'URL successfully created!'}</Alert>
 			<Button onClick={handleToActive} className='w-100'>{'Shorten another'}</Button>
 		</Form>
     )

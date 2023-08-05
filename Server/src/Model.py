@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 class UrlEntity(BaseModel):
-    tinyUrl: str
+    tiny_url: str
     url: str
