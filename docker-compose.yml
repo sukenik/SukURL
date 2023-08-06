@@ -1,0 +1,31 @@
+version: '3.6'
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: client.Dockerfile
+    ports:
+      - '3000:3000'
+
+  server:
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+    links:
+      - db
+    restart: always
+
+  db:
+    image: postgres:12
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'

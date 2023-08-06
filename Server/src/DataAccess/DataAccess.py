@@ -1,16 +1,15 @@
 import psycopg2
 import psycopg2.extras
-from settings import DB_NAME, USER_NAME, PASSWORD, HOST, PORT
 
 psycopg2.extras.register_uuid()
 
 def db_connect():
 	return psycopg2.connect(
-		database=DB_NAME,
-		user=USER_NAME,
-		password=PASSWORD,
-		host=HOST,
-		port=PORT
+		database='postgres',
+		user='postgres',
+		password='postgres',
+		host='db',
+		port='5432'
 	)
 
 def execute_query(query: str, hasResult = None):

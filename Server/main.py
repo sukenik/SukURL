@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from src.DataAccess.InitDB import init_db
-from src.schema.UrlService import UrlService
+from src.schema.URLService import UrlService
 from src.Middlewares import validate_tiny_url, validate_url
 from src.Model import UrlEntity
 

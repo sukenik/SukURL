@@ -1,5 +1,5 @@
 import json
-from src.DataAccess.DataAccess import execute_query_with_params, execute_query
+from src.DataAccess.DataAccess import execute_query_with_params
 
 class UrlService:
 	def convert_to_entity(row: tuple):
