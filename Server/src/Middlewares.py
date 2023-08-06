@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from urllib.parse import urlparse
-from src.schema.UrlService import UrlService
+from src.schema.URLService import UrlService
 
 def validate_tiny_url(tiny_url: str, req_url: str):
     if (len(tiny_url) < 5):
