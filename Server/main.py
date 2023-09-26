@@ -1,5 +1,6 @@
 from fastapi import FastAPI, responses, HTTPException
 from dotenv import load_dotenv
+import os
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from src.DataAccess.InitDB import init_db
@@ -11,6 +12,8 @@ load_dotenv()
 init_db()
 
 app = FastAPI()
+app2 = FastAPI()
+app3 = FastAPI()
 
 origins = ['*']
 
@@ -21,6 +24,34 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+app2.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
+
+app3.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
+
+@app.get('/nginx')
+def nginx():
+    return 'served from {0}'.format(os.getpid())
+
+@app2.get('/nginx')
+def nginx():
+    return 'served from {0}'.format(os.getpid())
+
+@app3.get('/nginx')
+def nginx():
+    return 'served from {0}'.format(os.getpid())
 
 @app.get('/my-urls')
 def read_all(limit: int, offset: int):
