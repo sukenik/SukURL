@@ -2,6 +2,7 @@ from fastapi import FastAPI, responses, HTTPException
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
+import redis
 from src.DataAccess.InitDB import init_db
 from src.schema.URLService import UrlService
 from src.Middlewares import validate_tiny_url, validate_url
@@ -11,6 +12,13 @@ load_dotenv()
 init_db()
 
 app = FastAPI()
+rd = redis.Redis(
+    'localhost',
+    port=6379,
+    db=0,
+    charset='utf-8',
+    decode_responses=True
+)
 
 origins = ['*']
 
@@ -28,9 +36,16 @@ def read_all(limit: int, offset: int):
 
 @app.get('/url/{tiny_url}')
 def read_url(req: Request):
-    url_row = UrlService.get_url_by_tiny('{0}'.format(req.url))
+    cache = rd.get(f'{req.url}')
+
+    if cache:
+        return responses.RedirectResponse(cache)
+
+    url_row = UrlService.get_url_by_tiny(f'{req.url}')
 
     if (url_row):
+        rd.set(f'{req.url}', url_row)
+
         return responses.RedirectResponse(url_row)
     else:
         return HTTPException(status_code=404, detail='URL not found.')
