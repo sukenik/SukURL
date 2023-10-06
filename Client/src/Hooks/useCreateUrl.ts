@@ -5,7 +5,6 @@ const useCreateUrl = async (
 	url: string,
 	tinyUrl: string,
 	setUIError: React.Dispatch<React.SetStateAction<string>>,
-	setCreatedUrl: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
 	const response = await axios.put(
 		endpoint,
@@ -15,15 +14,14 @@ const useCreateUrl = async (
 		if (error.response) {
 			setUIError(error.response.data.detail)
 		} else if (error.request) {
-			console.log(error.request)
-			throw Error(error)
+			setUIError('Failed to create url')
 		} else {
-			console.log('Error', error.message)
-			throw Error(error)
+			setUIError('Failed to create url')
 		}
+
+		return null
 	})
 
-	setCreatedUrl(true)
 	return response
 }
 
