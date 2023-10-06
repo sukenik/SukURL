@@ -50,16 +50,15 @@ const ActiveForm: React.FC<iProps> = ({
             return setUrlError('Invalid URL.')
         }
 
-        try {
-            resetErrors()
-            setIsLoading(true)
-            const response = await useCreateUrl(url, tinyUrl, setTinyUrlError, setCreatedTinyUrl)
-            setTinyUrl(response?.data.tinyUrl || '')
-        } catch {
-            setTinyUrlError('Failed to create url')
-            setIsLoading(false)
-        } finally {
-            setIsLoading(false)
+        resetErrors()
+        setIsLoading(true)
+
+        const response = await useCreateUrl(url, tinyUrl, setTinyUrlError)
+        setIsLoading(false)
+
+        if (response) {
+            setTinyUrl(response?.data?.tinyUrl || '')
+            setCreatedTinyUrl(true)
         }
     }
 
