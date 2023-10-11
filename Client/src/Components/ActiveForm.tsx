@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { Form, Button, Alert } from 'react-bootstrap'
 import useCreateUrl from '../Hooks/useCreateUrl'
-import { endpoint } from '../index'
 import { isValidUrl } from '../Utils'
 
 interface iProps {
-	setCreatedTinyUrl: React.Dispatch<React.SetStateAction<boolean>>
+	setIsUrlCreated: React.Dispatch<React.SetStateAction<boolean>>
 	url: string
 	setUrl: React.Dispatch<React.SetStateAction<string>>
 	tinyUrl: string
@@ -15,11 +14,17 @@ interface iProps {
 const ALPHANUMERIC_REGEX = /^[a-z0-9]+$/i
 
 const ActiveForm: React.FC<iProps> = ({
-	setCreatedTinyUrl, url, setUrl, tinyUrl, setTinyUrl
+	setIsUrlCreated, url, setUrl, tinyUrl, setTinyUrl
 }: iProps) => {
     const [urlError, setUrlError] = useState<string>('')
     const [tinyUrlError, setTinyUrlError] = useState<string>('')
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const { createUrl, isLoading } = useCreateUrl(
+        url,
+        tinyUrl,
+        setTinyUrlError,
+        setIsUrlCreated
+    )
 
     const resetErrors = () => {
         setUrlError('')
@@ -34,7 +39,7 @@ const ActiveForm: React.FC<iProps> = ({
         setTinyUrl(e.currentTarget.value || '')
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         resetErrors()
 
@@ -51,31 +56,27 @@ const ActiveForm: React.FC<iProps> = ({
         }
 
         resetErrors()
-        setIsLoading(true)
-
-        const response = await useCreateUrl(url, tinyUrl, setTinyUrlError)
-        setIsLoading(false)
-
-        if (response) {
-            setTinyUrl(response?.data?.tinyUrl || '')
-            setCreatedTinyUrl(true)
-        }
+        createUrl()
     }
 
     return (
 		<Form onSubmit={handleSubmit}>
 			<Form.Group>
 				<Form.Label>{'🔗 Shorten a long URL'}</Form.Label>
-				<Form.Control onChange={handleUrlChange} autoComplete='false' />
+				<Form.Control
+                    onChange={handleUrlChange}
+                    autoComplete='false'
+                    disabled={isLoading}
+                />
 				{urlError && <Alert className='my-2' variant='danger'>{urlError}</Alert>}
 			</Form.Group>
 			<Form.Group>
 				<Form.Label className='mt-2'>{'🪄 Customize your link'}</Form.Label>
-				<Form.Control className='mb-2' disabled={true} placeholder={endpoint} />
 				<Form.Control
 					onChange={handleTinyUrlChange}
 					autoComplete='false'
 					placeholder='Enter alias'
+                    disabled={isLoading}
 				/>
 				{tinyUrlError && <Alert className='my-2' variant='danger'>{tinyUrlError}</Alert>}
 				<Form.Text>{'Alias must be at least 5 alphanumeric characters.'}</Form.Text>

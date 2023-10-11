@@ -1,10 +1,10 @@
 import React from 'react'
 import { ListGroup, Spinner, Alert } from 'react-bootstrap'
-import { UrlEntity } from '../Utils'
+import { iUrl } from '../Utils'
 import UrlRow from './UrlRow'
 
 interface iProps {
-	urls: UrlEntity[]
+	urls: iUrl[]
 	isLoading: boolean
 }
 
@@ -25,8 +25,10 @@ const UrlsList: React.FC<iProps> = ({ urls, isLoading }) => {
 		{isLoading
 			? <Spinner variant='primary' style={{ margin: 'auto auto' }} />
 			: !!urls.length
-				? urls.map(url => <UrlRow key={url.tinyUrl} url={url} />)
-				: <Alert variant={'info'}>
+				? urls.map(url =>
+					<UrlRow key={url.tinyUrl} urlEntity={url} />
+				)
+				: <Alert variant={'info'} className={'mt-3'} style={{textAlign: 'center'}}>
 					{'No URLs'}
 				</Alert>
 		}

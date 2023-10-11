@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 const App: React.FC = () => {
     const [url, setUrl] = useState<string>('')
     const [tinyUrl, setTinyUrl] = useState<string>('')
-    const [createdTinyUrl, setCreatedTinyUrl] = useState<boolean>(false)
+    const [isCreatedUrl, setIsUrlCreated] = useState<boolean>(false)
 
     const navigate = useNavigate()
 
@@ -24,14 +24,14 @@ const App: React.FC = () => {
                 <Card>
                     <Card.Body>
                         <h2 className='text-center mb-4'>{'SukURL'}</h2>
-                        {createdTinyUrl
+                        {isCreatedUrl
                             ? <CompletedForm
                                 url={url}
                                 tinyUrl={tinyUrl}
-                                setCreatedTinyUrl={setCreatedTinyUrl}
+                                setIsUrlCreated={setIsUrlCreated}
                             />
                             : <ActiveForm
-                                setCreatedTinyUrl={setCreatedTinyUrl}
+                                setIsUrlCreated={setIsUrlCreated}
                                 url={url}
                                 setUrl={setUrl}
                                 tinyUrl={tinyUrl}

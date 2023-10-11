@@ -1,28 +1,39 @@
 import axios from 'axios'
-import { endpoint } from '../index'
+import { UseMutateFunction, useMutation, useQueryClient } from '@tanstack/react-query'
+import createUrl from '../API/createUrl'
+import { iUrl } from '../Utils'
 
-const useCreateUrl = async (
+interface iReturnType {
+	isLoading: boolean
+	createUrl: UseMutateFunction<iUrl, unknown, void, unknown>
+}
+
+const useCreateUrl = (
 	url: string,
 	tinyUrl: string,
 	setUIError: React.Dispatch<React.SetStateAction<string>>,
-) => {
-	const response = await axios.put(
-		endpoint,
-		{ tiny_url: tinyUrl, url }
-	)
-	.catch(error => {
-		if (error.response) {
-			setUIError(error.response.data.detail)
-		} else if (error.request) {
-			setUIError('Failed to create url')
-		} else {
-			setUIError('Failed to create url')
-		}
+	setIsUrlCreated: React.Dispatch<React.SetStateAction<boolean>>,
+): iReturnType => {
+	const queryClient = useQueryClient()
 
-		return null
+	const { isLoading, mutate } = useMutation({
+		mutationFn: () => createUrl(tinyUrl, url),
+		onSuccess: () => {
+			setIsUrlCreated(true)
+			queryClient.clear()
+		},
+		onError: (error) => {
+			if (axios.isAxiosError(error)) {
+				const data = error.response?.data as { detail: string }
+
+				setUIError(data.detail)
+			} else {
+				setUIError('Failed to create url')
+			}
+		}
 	})
 
-	return response
+	return { isLoading, createUrl: mutate }
 }
 
 export default useCreateUrl

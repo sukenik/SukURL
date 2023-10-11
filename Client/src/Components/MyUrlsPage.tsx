@@ -1,37 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { endpoint } from '../index'
+import React, { useState } from 'react'
 import { Card, Container, Button } from 'react-bootstrap'
 import UrlsList from './UrlsList'
 import { useNavigate } from 'react-router-dom'
-import { MY_URLS_LIMIT_NUM, UrlEntity } from '../Utils'
 import PaginationOptions from './PaginationOptions'
+import useGetMyUrls from '../Hooks/useGetMyUrls'
 
 const MyUrlsPage: React.FC = () => {
-	const [urls, setUrls] = useState<UrlEntity[]>([])
-	const [isLoading, setIsLoading] = useState<boolean>(false)
-	const [offset, setOffset] = useState<number>(0)
+	const [page, setPage] = useState<number>(0)
+	const [lastTinyUrl, setLastTinyUrl] = useState<string>()
+
+	const { urls, isLoading, isFetching } = useGetMyUrls(page, lastTinyUrl)
 
 	const navigate = useNavigate()
 
 	const handleBack = () => {
 		navigate(-1)
 	}
-
-	useEffect(() => {
-		setIsLoading(true)
-
-		axios.get(
-			`${endpoint}/my-urls?limit=${MY_URLS_LIMIT_NUM}&offset=${offset}`
-		).then((response) => {
-			setUrls(response.data.map((url: string) => (
-				JSON.parse(url)
-			)))
-			setIsLoading(false)
-		})
-
-		return () => setIsLoading(false)
-	}, [offset])
 
 	return (
         <Container
@@ -43,13 +27,13 @@ const MyUrlsPage: React.FC = () => {
                     <Card.Body>
                         <h2 className='text-center mb-4'>{'📃 My URLs'}</h2>
                         <UrlsList urls={urls} isLoading={isLoading} />
-						{!isLoading &&
-							<PaginationOptions
-								urls={urls}
-								offset={offset}
-								setOffset={setOffset}
-							/>
-						}
+						<PaginationOptions
+							setLastTinyUrl={setLastTinyUrl}
+							urls={urls}
+							page={page}
+							setPage={setPage}
+							isDisabled={isLoading || isFetching}
+						/>
                     </Card.Body>
                 </Card>
 				<Button
