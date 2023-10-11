@@ -7,7 +7,7 @@ import MyUrlsPage from './Components/MyUrlsPage'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-export const endpoint = 'http://localhost:8000'
+export const SERVER_URL = 'http://localhost:8000'
 const queryClient = new QueryClient()
 
 const root = document.getElementById('root')
