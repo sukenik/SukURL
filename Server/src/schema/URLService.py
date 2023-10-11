@@ -1,67 +1,77 @@
-import json
-from src.DataAccess.DataAccess import execute_query_with_params
+from google.cloud.firestore_v1.base_query import FieldFilter
+from src.DataAccess.Firestore import db
+from src.Model import UrlEntity
+
+COLLECTION_NAME = 'URL'
 
 class UrlService:
-	def convert_to_entity(row: tuple):
+	def convert_to_entity(url: str, tiny_url: str) -> UrlEntity:
 		db_object = {
-			'tinyUrl': str(row[0]),
-			'url': row[1]
+			'tinyUrl': tiny_url,
+			'url': url
 		}
 
-		parsed_object = json.dumps(db_object)
-		return parsed_object
+		return db_object
 
-	def create(tiny_url: str, url: str):
-		query = '''
-			INSERT INTO public."URL"(
-				"TINY_URL", "URL"
+	def create(url: str, tiny_url: str, doc_id: str) -> UrlEntity:
+		parsed_url = UrlService.convert_to_entity(url, tiny_url)
+
+		db.collection(COLLECTION_NAME).document(doc_id).set(parsed_url)
+
+		return parsed_url
+
+	def get_all(limit: int, tiny_url: str) -> [UrlEntity]:
+		result = []
+		query = None
+		urls_ref = db.collection(COLLECTION_NAME)
+
+		if tiny_url == 'undefined':
+			query = (
+				urls_ref
+				.order_by('tinyUrl')
+				.limit(limit)
+				.stream()
 			)
-			VALUES (%s, %s)
-			RETURNING "TINY_URL";
-		'''
+		else:
+			query = (
+				urls_ref
+				.order_by('tinyUrl')
+				.start_after({ 'tinyUrl': tiny_url })
+				.limit(limit)
+				.stream()
+			)
 
-		result = execute_query_with_params(query, [tiny_url, url], True)[0]
+		for doc in query:
+			result.append(doc.to_dict())
 
-		return { 'tinyUrl': result[0] }
+		return result
 
-	def get_all(limit: int, offset: int):
-		query = '''
-			SELECT "TINY_URL", "URL"
-			FROM public."URL"
-			LIMIT %s OFFSET %s;
-		'''
+	def check_for_duplicate_tiny_url(
+		tiny_url: str,
+		hashed_tiny_url: str
+	) -> (bool | None):
+		doc_ref = (
+			db.collection(COLLECTION_NAME)
+			.document(hashed_tiny_url)
+			.get()
+		)
 
-		result = execute_query_with_params(query, [limit, offset], True)
+		if doc_ref.exists:
+			doc = doc_ref.to_dict()
 
-		parsed_urls = []
+			if doc['tinyUrl'] == tiny_url:
+				return True
+			else:
+				return None
 
-		for row in result:
-			parsed_url = UrlService.convert_to_entity(row)
-			parsed_urls.append(parsed_url)
+		return False
 
-		return parsed_urls
-	
-	def check_for_duplicate_tiny_url(tiny_url):
-		query = '''
-			SELECT COUNT("TINY_URL")
-			FROM public."URL"
-			WHERE "TINY_URL" = %s; 
-		'''
+	def get_url_by_tiny(tiny_url: str) -> UrlEntity:
+		doc = (
+			db.collection(COLLECTION_NAME)
+			.where(filter=FieldFilter('tinyUrl', '==', tiny_url))
+			.get()
+		)[0]
+		url = doc.to_dict()
 
-		result = execute_query_with_params(query, [tiny_url], True)[0]
-		return bool(result[0])
-
-	def get_url_by_tiny(tiny_url):
-		query = '''
-			SELECT "URL"
-			FROM public."URL"
-			WHERE "TINY_URL" = %s; 
-		'''
-
-		result = execute_query_with_params(query, [tiny_url], True)
-
-		if (result):
-			first_row = result[0]
-			return first_row[0]
-
-		return []
+		return url

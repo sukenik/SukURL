@@ -7,7 +7,7 @@ export const isValidUrl = (urlString: string) => {
 	}
 }
 
-export interface UrlEntity {
+export interface iUrl {
 	tinyUrl: string
 	url: string
 }

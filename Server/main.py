@@ -1,14 +1,12 @@
 from fastapi import FastAPI, responses, HTTPException
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.requests import Request
-from src.DataAccess.InitDB import init_db
+from hashlib import sha256
 from src.schema.URLService import UrlService
 from src.Middlewares import validate_tiny_url, validate_url
 from src.Model import UrlEntity
 
 load_dotenv()
-init_db()
 
 app = FastAPI()
 
@@ -23,27 +21,34 @@ app.add_middleware(
 )
 
 @app.get('/my-urls')
-def read_all(limit: int, offset: int):
-    return UrlService.get_all(limit, offset)
+def read_all(limit: int, tiny_url: str):
+    return UrlService.get_all(limit, tiny_url)
 
 @app.get('/url/{tiny_url}')
-def read_url(req: Request):
-    url_row = UrlService.get_url_by_tiny('{0}'.format(req.url))
+def read_url(tiny_url: str):
+    url_result = UrlService.get_url_by_tiny(tiny_url)
 
-    if (url_row):
-        return responses.RedirectResponse(url_row)
+    if url_result:
+        return responses.RedirectResponse(url_result['url'])
     else:
         return HTTPException(status_code=404, detail='URL not found.')
 
 @app.put('/')
-def create_url(variables: UrlEntity, req: Request):
+def create_url(variables: UrlEntity):
     validate_url(variables.url)
-    validate_tiny_url(variables.tiny_url, '{0}{1}'.format(req.url, 'url/'))
 
-    return UrlService.create(
-        '{0}url/{1}'.format(req.url, variables.tiny_url),
-        variables.url
+    hashed_tiny_url = sha256(
+        (f'{variables.tiny_url}').encode()
+    ).hexdigest()
+
+    new_hashed_value = validate_tiny_url(
+        variables.tiny_url,
+        hashed_tiny_url
     )
+
+    doc_id = new_hashed_value or hashed_tiny_url
+
+    return UrlService.create(variables.url, variables.tiny_url, doc_id)
 
 @app.get('/favicon.ico', include_in_schema=False)
 def favicon():

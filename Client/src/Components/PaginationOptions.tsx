@@ -1,34 +1,40 @@
 import React from 'react'
 import { Pagination } from 'react-bootstrap'
-import { MY_URLS_LIMIT_NUM, UrlEntity } from '../Utils'
+import { iUrl } from '../Utils'
 
 interface iProps {
-	urls: UrlEntity[]
-	offset: number
-	setOffset: React.Dispatch<React.SetStateAction<number>>
+	setLastTinyUrl: React.Dispatch<React.SetStateAction<string | undefined>>
+	urls: iUrl[]
+	page: number
+	setPage: React.Dispatch<React.SetStateAction<number>>
+	isDisabled: boolean
 }
 
-const PaginationOptions: React.FC<iProps> = ({ setOffset, urls, offset }) => {
+const PaginationOptions: React.FC<iProps> = ({
+	setLastTinyUrl, urls, setPage, page, isDisabled
+}) => {
 
 	const handleNextClick = () => {
-		if (!urls.length) {
-			return
-		}
-		setOffset(currNum => currNum + MY_URLS_LIMIT_NUM)
+		const lastUrl = urls[urls.length - 1]
+
+		setPage(pageNum => ++pageNum)
+		setLastTinyUrl(lastUrl?.tinyUrl)
 	}
 
 	const handlePrevClick = () => {
-		setOffset(currNum => 
-			!!currNum
-				? currNum - MY_URLS_LIMIT_NUM
-				: currNum
-		)
+		setPage(pageNum => --pageNum)
 	}
 
 	return (
 		<Pagination style={{ margin: 0, justifyContent: 'center' }}>
-			<Pagination.Prev disabled={!offset} onClick={handlePrevClick} />
-			<Pagination.Next disabled={urls.length < 5} onClick={handleNextClick} />
+			<Pagination.Prev 
+				disabled={isDisabled || page === 0}
+				onClick={handlePrevClick}
+			/>
+			<Pagination.Next
+				disabled={isDisabled || urls.length < 5}
+				onClick={handleNextClick}
+			/>
 		</Pagination>
 	)
 }
