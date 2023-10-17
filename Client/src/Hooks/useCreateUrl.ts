@@ -12,14 +12,12 @@ const useCreateUrl = (
 	url: string,
 	tinyUrl: string,
 	setUIError: React.Dispatch<React.SetStateAction<string>>,
-	setIsUrlCreated: React.Dispatch<React.SetStateAction<boolean>>,
 ): iReturnType => {
 	const queryClient = useQueryClient()
 
 	const { isLoading, mutate } = useMutation({
 		mutationFn: () => createUrl(tinyUrl, url),
 		onSuccess: () => {
-			setIsUrlCreated(true)
 			queryClient.clear()
 		},
 		onError: (error) => {

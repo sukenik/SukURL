@@ -50,6 +50,14 @@ def create_url(variables: UrlEntity):
 
     return UrlService.create(variables.url, variables.tiny_url, doc_id)
 
+@app.delete('/{tiny_url}')
+def delete_url(tiny_url: str):
+    hashed_tiny_url = sha256(
+        (f'{tiny_url}').encode()
+    ).hexdigest()
+
+    return UrlService.delete(hashed_tiny_url)
+
 @app.get('/favicon.ico', include_in_schema=False)
 def favicon():
     file_path = 'favicon.ico'

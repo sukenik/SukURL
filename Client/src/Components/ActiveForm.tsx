@@ -22,8 +22,7 @@ const ActiveForm: React.FC<iProps> = ({
     const { createUrl, isLoading } = useCreateUrl(
         url,
         tinyUrl,
-        setTinyUrlError,
-        setIsUrlCreated
+        setTinyUrlError
     )
 
     const resetErrors = () => {
@@ -57,6 +56,7 @@ const ActiveForm: React.FC<iProps> = ({
 
         resetErrors()
         createUrl()
+        setIsUrlCreated(true)
     }
 
     return (
