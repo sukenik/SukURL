@@ -17,11 +17,14 @@ const useDeleteUrl = (
 			if (currPageUrls.length < 5) {
 				queryClient.setQueryData([URLS_CACHE_KEY, page], (currData?: iUrl[]) => {
 					const urls = currData || []
+
 					return urls.filter(url => url.tinyUrl !== tinyUrl)
 				})
-			}
-			else {
-				queryClient.invalidateQueries({ queryKey: [URLS_CACHE_KEY, page], exact: true })
+			} else {
+				queryClient.invalidateQueries({
+					queryKey: [URLS_CACHE_KEY, page],
+					exact: true
+				})
 
 				removeQueriesFromPage(page, queryClient)
 			}

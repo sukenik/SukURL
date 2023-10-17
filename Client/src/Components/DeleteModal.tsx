@@ -14,7 +14,7 @@ const modalBackground: CSSProperties = {
 }
 
 const modalContent: CSSProperties = {
-    width: 500,
+    width: '500px',
     backgroundColor: '#fff',
 	borderRadius: '10px'
 }
@@ -24,28 +24,25 @@ const modalTitle: CSSProperties = {
     margin: 0,
     fontSize: 30,
     wordWrap: 'break-word',
-    padding: 10
+    padding: '10px'
 }
 
 const StyledButton: CSSProperties = {
     backgroundColor: 'white',
     border: '1px solid red',
     color: 'red',
-    paddingTop: 10,
-    paddingRight: 16,
-    paddingBottom: 10,
-    paddingLeft: 16,
+    padding: '10px 16px',
     fontSize: 16,
     cursor: 'pointer',
-    margin: 5,
+    margin: '5px',
 	borderRadius: '5px',
 	fontWeight: '500'
 }
 
 const modalBody: CSSProperties = {
-    padding: 10,
+    padding: '10px',
     borderTop: '1px solid #eee',
-	marginTop: 20,
+	marginTop: '20px',
 	display: 'flex',
 	justifyContent: 'space-between'
 }
@@ -87,7 +84,7 @@ const DeleteModal: React.FC<iProps> = ({ urlToDelete, setUrlToDelete, page }) =>
 	return (
 		<div style={modalBackground} onClick={closeModal}>
 			<div style={modalContent} onClick={handleContentClick}>
-				<div style={{ padding: 10 }}>
+				<div style={{ padding: '10px' }}>
 					<p style={modalTitle}>{'Delete URL'}</p>
 					<div style={urlTextContainer}>
 						<div style={{ minWidth: '39%' }}>{'Sure you want to delete'}</div>
@@ -97,7 +94,7 @@ const DeleteModal: React.FC<iProps> = ({ urlToDelete, setUrlToDelete, page }) =>
 				</div>
 				<div style={modalBody}>
 					<button
-						style={{ ...StyledButton, paddingRight: '20px', paddingLeft: '20px' }} 
+						style={{ ...StyledButton, padding: '0 20px' }} 
 						onClick={handleSubmit}
 					>
 						{'Delete'}

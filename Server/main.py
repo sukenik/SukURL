@@ -51,7 +51,7 @@ def create_url(variables: UrlEntity):
     return UrlService.create(variables.url, variables.tiny_url, doc_id)
 
 @app.delete('/{tiny_url}')
-def read_all(tiny_url: str):
+def delete_url(tiny_url: str):
     hashed_tiny_url = sha256(
         (f'{tiny_url}').encode()
     ).hexdigest()
