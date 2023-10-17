@@ -1,5 +1,6 @@
 import React, { CSSProperties } from 'react'
 import useDeleteUrl from '../Hooks/useDeleteUrl'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 const modalBackground: CSSProperties = {
     position: 'fixed',
@@ -88,7 +89,12 @@ const DeleteModal: React.FC<iProps> = ({ urlToDelete, setUrlToDelete, page }) =>
 					<p style={modalTitle}>{'Delete URL'}</p>
 					<div style={urlTextContainer}>
 						<div style={{ minWidth: '39%' }}>{'Sure you want to delete'}</div>
-						<div style={urlText}>{`"${urlToDelete}`}</div>
+						<OverlayTrigger
+							overlay={<Tooltip id={urlToDelete}>{urlToDelete}</Tooltip>}
+							placement={'bottom-start'}
+						>
+							<div style={urlText}>{`"${urlToDelete}`}</div>
+						</OverlayTrigger>
 						<div>{'"?'}</div>
 					</div>
 				</div>
