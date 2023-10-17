@@ -1,12 +1,14 @@
 import axios from 'axios'
-import { SERVER_URL } from '..'
 import { iUrl } from '../Utils'
+import { SERVER_URL } from '../appConfig'
 
 const createUrl = async (tinyUrl: string, url: string): Promise<iUrl> => {
-	return axios.put(
+	const res = await axios.put(
 		SERVER_URL,
 		{ tiny_url: tinyUrl, url }
-	).then(res => res.data)
+	)
+
+	return res.data
 }
 
 export default createUrl

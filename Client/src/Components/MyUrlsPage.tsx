@@ -4,10 +4,12 @@ import UrlsList from './UrlsList'
 import { useNavigate } from 'react-router-dom'
 import PaginationOptions from './PaginationOptions'
 import useGetMyUrls from '../Hooks/useGetMyUrls'
+import DeleteModal from './DeleteModal'
 
 const MyUrlsPage: React.FC = () => {
 	const [page, setPage] = useState<number>(0)
 	const [lastTinyUrl, setLastTinyUrl] = useState<string>()
+	const [tinyUrlToDelete, setTinyUrlToDelete] = useState<string>('')
 
 	const { urls, isLoading, isFetching } = useGetMyUrls(page, lastTinyUrl)
 
@@ -26,7 +28,11 @@ const MyUrlsPage: React.FC = () => {
                 <Card>
                     <Card.Body>
                         <h2 className='text-center mb-4'>{'📃 My URLs'}</h2>
-                        <UrlsList urls={urls} isLoading={isLoading} />
+                        <UrlsList
+							urls={urls}
+							isLoading={isLoading}
+							handleDeleteUrl={setTinyUrlToDelete}
+						/>
 						<PaginationOptions
 							setLastTinyUrl={setLastTinyUrl}
 							urls={urls}
@@ -44,6 +50,14 @@ const MyUrlsPage: React.FC = () => {
 					{'Back'}
 				</Button>
             </div>
+			{
+				!!tinyUrlToDelete &&
+				<DeleteModal
+					urlToDelete={tinyUrlToDelete}
+					setUrlToDelete={setTinyUrlToDelete}
+					page={page}
+				/>
+			}
         </Container>
 	)
 }

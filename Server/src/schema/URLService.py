@@ -75,3 +75,6 @@ class UrlService:
 		url = doc.to_dict()
 
 		return url
+
+	def delete(doc_id: str):
+		db.collection(COLLECTION_NAME).document(doc_id).delete()
