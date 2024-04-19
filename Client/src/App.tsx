@@ -3,6 +3,7 @@ import { Card, Container, Button } from 'react-bootstrap'
 import ActiveForm from './Components/ActiveForm'
 import CompletedForm from './Components/CompletedForm'
 import { useNavigate } from 'react-router-dom'
+import ThemeButton from './Components/ThemeButton'
 
 const App: React.FC = () => {
     const [url, setUrl] = useState<string>('')
@@ -17,7 +18,7 @@ const App: React.FC = () => {
 
     return (
         <Container
-            className='d-flex align-items-center justify-content-center' 
+            className={'d-flex align-items-center justify-content-center'}
             style={{ minHeight: '100vh' }}
         >
             <div className='w-100' style={{ maxWidth: '500px' }}>
@@ -48,6 +49,7 @@ const App: React.FC = () => {
                     {'My URLs'}
                 </Button>
             </div>
+            <ThemeButton />
         </Container>
     )
 }

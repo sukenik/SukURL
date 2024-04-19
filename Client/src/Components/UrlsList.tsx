@@ -2,6 +2,7 @@ import React from 'react'
 import { ListGroup, Spinner, Alert } from 'react-bootstrap'
 import { iUrl } from '../Utils'
 import UrlRow from './UrlRow'
+import { useThemeContext } from '../Context/ThemeProvider'
 
 const titleStyle: React.CSSProperties = {
 	textDecoration: 'underline',
@@ -15,6 +16,8 @@ interface iProps {
 }
 
 const UrlsList: React.FC<iProps> = ({ urls, isLoading, handleDeleteUrl }) => {
+  const { darkTheme } = useThemeContext()
+
   return (
     <ListGroup
 		variant='flush'
@@ -24,9 +27,23 @@ const UrlsList: React.FC<iProps> = ({ urls, isLoading, handleDeleteUrl }) => {
 			overflowY: 'visible'
 		}}
 	>
-		<ListGroup.Item style={{ display: 'flex' }}>
-			<div style={titleStyle}>{'From:'}</div>
-			<div style={titleStyle}>{'To:'}</div>
+		<ListGroup.Item style={{
+			display: 'flex',
+			backgroundColor: darkTheme ? 'black' : 'white'
+		}}>
+			<div style={{
+				...titleStyle,
+				color: darkTheme ? 'white' : 'black'
+			}}>
+				{'From:'}
+			</div>
+			
+			<div style={{
+				...titleStyle,
+				color: darkTheme ? 'white' : 'black'
+			}}>
+				{'To:'}
+			</div>
 		</ListGroup.Item>	
 		{isLoading
 			? <Spinner variant='primary' style={{ margin: 'auto auto' }} />
