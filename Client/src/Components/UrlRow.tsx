@@ -2,6 +2,7 @@ import React, { CSSProperties } from 'react'
 import { ListGroup, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { iUrl } from '../Utils'
+import OverflowTooltip from './OverflowTooltip'
 
 const linkWrapper: CSSProperties = {
 	width: '48%',
@@ -29,25 +30,34 @@ const UrlRow: React.FC<iProps> = ({ urlEntity, handleDeleteUrl }: iProps) => {
 	}
 
 	return (
-		<ListGroup.Item key={tinyUrl} style={{ display: 'flex' }}>
+		<ListGroup.Item
+			key={tinyUrl}
+			style={{ display: 'flex' }}
+		>
 			<div style={linkWrapper}>
-				<OverlayTrigger
-					overlay={<Tooltip id={tinyUrl}>{tinyUrl}</Tooltip>}
-					placement={'top'}
+				<OverflowTooltip
+					tooltipText={tinyUrl}
+					placement={'bottom'}
 				>
 					<Link style={linkStyles} target={'_blank'} to={url}>{tinyUrl}</Link>
-				</OverlayTrigger>
+				</OverflowTooltip>
 			</div>
 			<div style={{ ...linkWrapper, width: '47%' }}>
 				<OverlayTrigger
 					overlay={<Tooltip id={tinyUrl}>{url}</Tooltip>}
-					placement={'top'}
+					placement={'bottom'}
 				>
 					<Link style={linkStyles} target={'_blank'} to={url}>{url}</Link>
 				</OverlayTrigger>
 			</div>
 			<div style={{ cursor: 'pointer' }} onClick={handleDelete}>
-				{'🗑️'}
+			
+				<OverlayTrigger
+					overlay={<Tooltip id={'delete'}>{'Delete url'}</Tooltip>}
+					placement={'bottom'}
+				>
+					<div>{'🗑️'}</div>
+				</OverlayTrigger>
 			</div>
 		</ListGroup.Item>
 	)
