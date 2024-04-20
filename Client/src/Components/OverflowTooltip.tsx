@@ -1,49 +1,58 @@
 import React from 'react'
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
-import { Placement } from 'react-bootstrap/esm/types'
+import { useMemo, useState } from 'react'
+import Tooltip from './Tooltip'
+import { v4 as uuid } from 'uuid'
 
-function checkOverflow(el: HTMLElement) {
-	console.log(el.style.overflow)
+const checkOverflow = (id: string) => {
+	const el = document.getElementById(id)?.children[0] as HTMLElement
 
-	var curOverflow = el.style.overflow
-	const newOverflow = {}
- 
-	if (!curOverflow || curOverflow === 'visible') {
-	   Object.defineProperty(newOverflow, 'overflow', {
-			value: el.style.overflow,
-			writable: true
-		})
+	if (el) {
+		const curOverflow = el.style.overflow
 
-		newOverflow?.style?.overflow = 'hidden'
+		if (!curOverflow || curOverflow === 'visible') {
+			el.style.overflow = 'hidden'
+		}
+
+		const isOverflowing = el.clientWidth < el.scrollWidth
+			|| el.clientHeight < el.scrollHeight
+
+		el.style.overflow = curOverflow
+
+		return isOverflowing
 	}
- 
-	var isOverflowing = el.clientWidth < el.scrollWidth 
-	   || el.clientHeight < el.scrollHeight
- 
-	el.style.overflow = curOverflow
- 
-	return isOverflowing
+
+	return false
 }
 
 interface iProps {
-	children: JSX.Element
-	tooltipText: string
-	placement: Placement
+	children: React.ReactElement<{ isOverflowing: boolean }>
+	title: string
+	showTooltip?: boolean
 }
 
-const OverflowTooltip: React.FC<iProps> = ({ children, tooltipText, placement }) => {
-	const isOverflowing = checkOverflow(children.props)
+const OverflowTooltip: React.FC<iProps> = ({ children, title, showTooltip }) => {
+	const [isOverflowing, setIsOverflowing] = useState(false)
+	const id = useMemo(() => uuid(), [])
+
+	const onMouseEnter = () => setIsOverflowing(showTooltip || checkOverflow(id))
+	const onMouseLeave = () => setIsOverflowing(false)
+
+	const textContainer = (
+		<div id={id} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+			{children}
+		</div>
+	)
+
+	const location = (document.getElementById(id)?.children[0] as HTMLElement)?.getBoundingClientRect()
 
 	return (
 		isOverflowing
-			? <OverlayTrigger
-				onEnter={e => checkOverflow(e)}
-				overlay={<Tooltip id={tooltipText}>{tooltipText}</Tooltip>}
-				placement={placement}
-			>
-				{children}
-			</OverlayTrigger>
-			: <div>{children}</div>
+			? (
+				<Tooltip title={title} location={{ x: `${location.x}px`, y: `${location.y}px` }}>
+					{textContainer}
+				</Tooltip>
+			)
+			: textContainer
 	)
 }
 

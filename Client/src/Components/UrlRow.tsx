@@ -8,13 +8,13 @@ const linkWrapper: CSSProperties = {
 	width: '48%',
 	textAlign: 'left',
 	maxHeight: '100px',
-	display: 'flex'
 }
 
 const linkStyles: CSSProperties = {
 	overflow: 'hidden',
 	textOverflow: 'ellipsis',
-	whiteSpace: 'nowrap'
+	whiteSpace: 'nowrap',
+	display: 'block'
 }
 
 interface iProps {
@@ -35,29 +35,19 @@ const UrlRow: React.FC<iProps> = ({ urlEntity, handleDeleteUrl }: iProps) => {
 			style={{ display: 'flex' }}
 		>
 			<div style={linkWrapper}>
-				<OverflowTooltip
-					tooltipText={tinyUrl}
-					placement={'bottom'}
-				>
+				<OverflowTooltip title={tinyUrl}>
 					<Link style={linkStyles} target={'_blank'} to={url}>{tinyUrl}</Link>
 				</OverflowTooltip>
 			</div>
 			<div style={{ ...linkWrapper, width: '47%' }}>
-				<OverlayTrigger
-					overlay={<Tooltip id={tinyUrl}>{url}</Tooltip>}
-					placement={'bottom'}
-				>
+				<OverflowTooltip title={url}>
 					<Link style={linkStyles} target={'_blank'} to={url}>{url}</Link>
-				</OverlayTrigger>
+				</OverflowTooltip>
 			</div>
-			<div style={{ cursor: 'pointer' }} onClick={handleDelete}>
-			
-				<OverlayTrigger
-					overlay={<Tooltip id={'delete'}>{'Delete url'}</Tooltip>}
-					placement={'bottom'}
-				>
+			<div style={{ cursor: 'pointer', marginLeft: 'auto' }} onClick={handleDelete}>
+				<OverflowTooltip title={'Delete url'} showTooltip>
 					<div>{'🗑️'}</div>
-				</OverlayTrigger>
+				</OverflowTooltip>
 			</div>
 		</ListGroup.Item>
 	)
