@@ -36,16 +36,15 @@ const arrowStyle: React.CSSProperties = {
 interface iProps {
 	children: React.ReactNode
 	title: string
-	location: {
-		x: string
-		y: string
-	}
+	elementId: string
 }
 
-const Tooltip: React.FC<iProps> = ({ children, title, location }) => {
+const Tooltip: React.FC<iProps> = ({ children, title, elementId }) => {
 	const [hasMounted, setHasMounted] = useState(false)
-	const { x, y } = location
-	console.log(x, y)
+
+	const elementLocation = (
+		document.getElementById(elementId)?.children[0] as HTMLElement
+	)?.getBoundingClientRect()
 
 	useEffect(() => {
 		setHasMounted(true)
@@ -57,7 +56,7 @@ const Tooltip: React.FC<iProps> = ({ children, title, location }) => {
 				<span style={{
 					...textStyle,
 					opacity: hasMounted ? 1 : 0,
-					transform: `translate3d(${x}, ${y})`
+					transform: `translate3d(${elementLocation.x}px, ${elementLocation.y}px)`
 				}}>
 					{title}
 					<span style={arrowStyle}></span>

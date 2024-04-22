@@ -43,12 +43,10 @@ const OverflowTooltip: React.FC<iProps> = ({ children, title, showTooltip }) => 
 		</div>
 	)
 
-	const location = (document.getElementById(id)?.children[0] as HTMLElement)?.getBoundingClientRect()
-
 	return (
 		isOverflowing
 			? (
-				<Tooltip title={title} location={{ x: `${location.x}px`, y: `${location.y}px` }}>
+				<Tooltip title={title} elementId={id}>
 					{textContainer}
 				</Tooltip>
 			)
