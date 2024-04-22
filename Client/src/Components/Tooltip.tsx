@@ -19,7 +19,8 @@ const textStyle: React.CSSProperties = {
 	marginLeft: '-60px',
 	marginTop: '5px',
 	transition: 'opacity .2s linear',
-	opacity: 0
+	opacity: 0,
+	wordWrap: 'break-word'
 }
 
 const arrowStyle: React.CSSProperties = {

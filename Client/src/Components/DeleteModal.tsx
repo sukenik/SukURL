@@ -1,6 +1,9 @@
 import React, { CSSProperties } from 'react'
 import useDeleteUrl from '../Hooks/useDeleteUrl'
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
+import OverflowTooltip from './OverflowTooltip'
+
+const MODAL_WIDTH = '500px'
+const URL_MAX_WIDTH = '275px'
 
 const modalBackground: CSSProperties = {
     position: 'fixed',
@@ -15,7 +18,7 @@ const modalBackground: CSSProperties = {
 }
 
 const modalContent: CSSProperties = {
-    width: '500px',
+    width: MODAL_WIDTH,
     backgroundColor: '#fff',
 	borderRadius: '10px'
 }
@@ -52,6 +55,7 @@ const urlText: CSSProperties = {
     overflow: 'hidden',
 	textOverflow: 'ellipsis',
 	whiteSpace: 'nowrap',
+	maxWidth: URL_MAX_WIDTH
 }
 
 const urlTextContainer: CSSProperties = {
@@ -88,13 +92,10 @@ const DeleteModal: React.FC<iProps> = ({ urlToDelete, setUrlToDelete, page }) =>
 				<div style={{ padding: '10px' }}>
 					<p style={modalTitle}>{'Delete URL'}</p>
 					<div style={urlTextContainer}>
-						<div style={{ minWidth: '39%' }}>{'Sure you want to delete'}</div>
-						<OverlayTrigger
-							overlay={<Tooltip id={urlToDelete}>{urlToDelete}</Tooltip>}
-							placement={'bottom-start'}
-						>
+						<div style={{ marginRight: 'auto' }}>{'Sure you want to delete'}</div>
+						<OverflowTooltip title={urlToDelete}>
 							<div style={urlText}>{`"${urlToDelete}`}</div>
-						</OverlayTrigger>
+						</OverflowTooltip>
 						<div>{'"?'}</div>
 					</div>
 				</div>

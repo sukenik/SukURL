@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react'
-import { ListGroup, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { ListGroup } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { iUrl } from '../Utils'
 import OverflowTooltip from './OverflowTooltip'
