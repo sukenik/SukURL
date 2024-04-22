@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 const container: React.CSSProperties = {
 	position: 'relative',
-	display: 'flex'
 }
 
 const textStyle: React.CSSProperties = {
-	width: '120px',
+	minWidth: '120px',
 	maxWidth: '240px',
 	backgroundColor: 'black',
 	color: '#fff',
@@ -15,8 +14,9 @@ const textStyle: React.CSSProperties = {
 	borderRadius: '6px',
 	position: 'absolute',
 	zIndex: 1,
-	// top: '50%',
-	// left: '50%',
+	top: '100%',
+	left: '30%',
+	marginLeft: '-60px',
 	marginTop: '5px',
 	transition: 'opacity .2s linear',
 	opacity: 0
