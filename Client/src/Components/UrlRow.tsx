@@ -2,14 +2,19 @@ import React, { CSSProperties } from 'react'
 import { ListGroup } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { iUrl } from '../Utils'
+import OverflowTooltip from './OverflowTooltip'
 
-const linkStyles: CSSProperties = {
-	width: '50%',
+const linkWrapper: CSSProperties = {
+	width: '48%',
 	textAlign: 'left',
 	maxHeight: '100px',
+}
+
+const linkStyles: CSSProperties = {
 	overflow: 'hidden',
 	textOverflow: 'ellipsis',
-	whiteSpace: 'nowrap'
+	whiteSpace: 'nowrap',
+	display: 'block'
 }
 
 interface iProps {
@@ -25,15 +30,24 @@ const UrlRow: React.FC<iProps> = ({ urlEntity, handleDeleteUrl }: iProps) => {
 	}
 
 	return (
-		<ListGroup.Item key={tinyUrl} style={{ display: 'flex' }}>
-			<div style={linkStyles}>
-				<Link target='_blank' to={url}>{tinyUrl}</Link>
+		<ListGroup.Item
+			key={tinyUrl}
+			style={{ display: 'flex' }}
+		>
+			<div style={linkWrapper}>
+				<OverflowTooltip title={tinyUrl}>
+					<Link style={linkStyles} target={'_blank'} to={url}>{tinyUrl}</Link>
+				</OverflowTooltip>
 			</div>
-			<div style={linkStyles}>
-				<Link target='_blank' to={url}>{url}</Link>
+			<div style={{ ...linkWrapper, width: '47%' }}>
+				<OverflowTooltip title={url}>
+					<Link style={linkStyles} target={'_blank'} to={url}>{url}</Link>
+				</OverflowTooltip>
 			</div>
-			<div style={{ cursor: 'pointer' }} onClick={handleDelete}>
-				{'🗑️'}
+			<div style={{ cursor: 'pointer', marginLeft: 'auto' }} onClick={handleDelete}>
+				<OverflowTooltip title={'Delete url'} showTooltip>
+					<div>{'🗑️'}</div>
+				</OverflowTooltip>
 			</div>
 		</ListGroup.Item>
 	)

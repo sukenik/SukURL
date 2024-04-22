@@ -1,28 +1,40 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+
 const path = require('path')
 
 module.exports = {
     entry: './src/index.tsx',
-    devtool: 'source-map',
+    devtool: 'eval',
+    cache: true,
     // TODO: Change to production respectively
     mode: 'development',
     output: {
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        chunkFilename: '[id].[chunkhash].js'
     },
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
+                include: path.resolve(__dirname, 'src'),
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader'
-                }
+                loader: 'babel-loader'
             },
             {
                 test: /\.(ts|tsx)?$/,
-                loader: 'ts-loader',
-                exclude: /node_modules/
+                include: path.resolve(__dirname, 'src'),
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            transpileOnly: true
+                        }
+                    }
+                ]
             },
             {
                 test: /\.css$/,
@@ -30,11 +42,12 @@ module.exports = {
                     'style-loader',
                     'css-loader'
                 ]
-            },
+            }
         ]
     },
     resolve: {
-        extensions: ['.ts', '.js', '.json', '.tsx', '.jsx']
+        extensions: ['.ts', '.js', '.json', '.tsx', '.jsx'],
+        symlinks: false
     },
     devServer: {
         port: 3000,
@@ -42,10 +55,20 @@ module.exports = {
         hot: true,
         historyApiFallback: true
     },
-    plugins: [new HtmlWebpackPlugin({
-        template: 'public/index.html',
-        hash: true,
-        filename: '../dist/index.html'
-    })]
+    plugins: [
+        new ForkTsCheckerWebpackPlugin(),
+        new ForkTsCheckerNotifierWebpackPlugin({
+            title: 'TypeScript',
+            excludeWarnings: false,
+        }),
+        new HtmlWebpackPlugin({
+            template: 'public/index.html',
+            hash: true,
+            filename: '../dist/index.html'
+        })
+    ],
+    optimization: {
+        runtimeChunk: true
+    }
 }
 
