@@ -17,12 +17,6 @@ module.exports = merge(common, {
 			path: './dev.env'
 		}),
 	],
-	devServer: {
-		port: 3000,
-		open: true,
-		hot: true,
-		historyApiFallback: true
-	},
 	optimization: {
 		runtimeChunk: true
 	}
