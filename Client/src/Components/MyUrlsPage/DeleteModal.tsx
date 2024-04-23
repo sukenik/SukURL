@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react'
-import useDeleteUrl from '../Hooks/useDeleteUrl'
-import OverflowTooltip from './OverflowTooltip'
+import useDeleteUrl from '../../Hooks/useDeleteUrl'
+import OverflowTooltip from '../OverflowTooltip'
 
 const MODAL_WIDTH = '500px'
 const URL_MAX_WIDTH = '275px'

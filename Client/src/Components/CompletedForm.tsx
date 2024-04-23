@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Button, Alert } from 'react-bootstrap'
-import { SERVER_URL } from '../appConfig'
+import { SERVER_URL } from '../AppConfig'
 
 interface iProps {
 	url: string
