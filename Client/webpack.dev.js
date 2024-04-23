@@ -17,14 +17,6 @@ module.exports = merge(common, {
 			path: './dev.env'
 		}),
 	],
-	module: {
-		rules: [
-			{
-				test: /\.jsx$/,
-				use: 'react-hot-loader'
-			}
-		]
-	},
 	devServer: {
 		port: 3000,
 		open: true,
