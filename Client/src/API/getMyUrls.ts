@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { MY_URLS_LIMIT_NUM, iUrl } from '../Utils'
-import { SERVER_URL } from '../appConfig'
+import { SERVER_URL } from '../AppConfig'
 
 const getMyUrls = async (tinyUrl?: string): Promise<iUrl[]> => {
 	const res = await axios.get(

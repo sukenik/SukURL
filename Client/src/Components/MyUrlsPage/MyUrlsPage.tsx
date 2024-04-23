@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { Card, Container, Button } from 'react-bootstrap'
 import UrlsList from './UrlsList'
 import { useNavigate } from 'react-router-dom'
-import PaginationOptions from './PaginationOptions'
-import useGetMyUrls from '../Hooks/useGetMyUrls'
+import PaginationOptions from '../PaginationOptions'
+import useGetMyUrls from '../../Hooks/useGetMyUrls'
 import DeleteModal from './DeleteModal'
 
 const MyUrlsPage: React.FC = () => {

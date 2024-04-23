@@ -6,13 +6,22 @@ const path = require('path')
 
 module.exports = {
     entry: './src/index.tsx',
-    devtool: 'eval',
-    cache: true,
-    // TODO: Change to production respectively
-    mode: 'development',
+    plugins: [
+        new ForkTsCheckerWebpackPlugin(),
+        new ForkTsCheckerNotifierWebpackPlugin({
+            title: 'TypeScript',
+            excludeWarnings: false,
+        }),
+        new HtmlWebpackPlugin({
+            // favicon: 'Assets/favicon.ico',
+            template: 'public/index.html',
+            hash: true,
+            filename: '../dist/index.html'
+        })
+    ],
     output: {
-        filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
+        filename: '[name].js',
         chunkFilename: '[id].[chunkhash].js'
     },
     module: {
@@ -42,33 +51,15 @@ module.exports = {
                     'style-loader',
                     'css-loader'
                 ]
-            }
+            },
+            {
+                test: /\.png$/,
+                use: 'file-loader'
+            },
         ]
     },
     resolve: {
         extensions: ['.ts', '.js', '.json', '.tsx', '.jsx'],
         symlinks: false
     },
-    devServer: {
-        port: 3000,
-        open: true,
-        hot: true,
-        historyApiFallback: true
-    },
-    plugins: [
-        new ForkTsCheckerWebpackPlugin(),
-        new ForkTsCheckerNotifierWebpackPlugin({
-            title: 'TypeScript',
-            excludeWarnings: false,
-        }),
-        new HtmlWebpackPlugin({
-            template: 'public/index.html',
-            hash: true,
-            filename: '../dist/index.html'
-        })
-    ],
-    optimization: {
-        runtimeChunk: true
-    }
 }
-

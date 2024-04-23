@@ -1,8 +1,8 @@
 import React, { CSSProperties } from 'react'
 import { ListGroup } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { iUrl } from '../Utils'
-import OverflowTooltip from './OverflowTooltip'
+import { iUrl } from '../../Utils'
+import OverflowTooltip from '../OverflowTooltip'
 
 const linkWrapper: CSSProperties = {
 	width: '48%',
