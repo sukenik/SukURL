@@ -5,22 +5,23 @@ from src.Model import UrlEntity
 COLLECTION_NAME = 'URL'
 
 class UrlService:
-	def convert_to_entity(url: str, tiny_url: str) -> UrlEntity:
+	def convert_to_entity(url: str, tiny_url: str, user_id: str) -> UrlEntity:
 		db_object = {
 			'tinyUrl': tiny_url,
-			'url': url
+			'url': url,
+			'userId': user_id,
 		}
 
 		return db_object
 
-	def create(url: str, tiny_url: str, doc_id: str) -> UrlEntity:
-		parsed_url = UrlService.convert_to_entity(url, tiny_url)
+	def create(url: str, tiny_url: str, doc_id: str, user_id: str) -> UrlEntity:
+		parsed_url = UrlService.convert_to_entity(url, tiny_url, user_id)
 
 		db.collection(COLLECTION_NAME).document(doc_id).set(parsed_url)
 
 		return parsed_url
 
-	def get_all(limit: int, tiny_url: str) -> [UrlEntity]:
+	def get_all_by_user_id(limit: int, tiny_url: str, user_id: str) -> list[UrlEntity]:
 		result = []
 		query = None
 		urls_ref = db.collection(COLLECTION_NAME)
@@ -28,17 +29,19 @@ class UrlService:
 		if tiny_url == 'undefined':
 			query = (
 				urls_ref
-				.order_by('tinyUrl')
-				.limit(limit)
-				.stream()
+					.where(filter=FieldFilter('userId', '==', user_id))
+					.order_by('tinyUrl')
+					.limit(limit)
+					.stream()
 			)
 		else:
 			query = (
 				urls_ref
-				.order_by('tinyUrl')
-				.start_after({ 'tinyUrl': tiny_url })
-				.limit(limit)
-				.stream()
+					.where(filter=FieldFilter('userId', '==', user_id))
+					.order_by('tinyUrl')
+					.start_after({ 'tinyUrl': tiny_url })
+					.limit(limit)
+					.stream()
 			)
 
 		for doc in query:
@@ -52,8 +55,8 @@ class UrlService:
 	) -> (bool | None):
 		doc_ref = (
 			db.collection(COLLECTION_NAME)
-			.document(hashed_tiny_url)
-			.get()
+				.document(hashed_tiny_url)
+				.get()
 		)
 
 		if doc_ref.exists:
@@ -69,8 +72,8 @@ class UrlService:
 	def get_url_by_tiny(tiny_url: str) -> UrlEntity:
 		doc = (
 			db.collection(COLLECTION_NAME)
-			.where(filter=FieldFilter('tinyUrl', '==', tiny_url))
-			.get()
+				.where(filter=FieldFilter('tinyUrl', '==', tiny_url))
+				.get()
 		)[0]
 		url = doc.to_dict()
 

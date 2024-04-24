@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { UseMutateFunction, useMutation, useQueryClient } from '@tanstack/react-query'
 import createUrl from '../API/createUrl'
-import { iUrl } from '../Utils'
+import { iUrl, useCurrentUserId } from '../Utils'
 
 interface iReturnType {
 	isLoading: boolean
@@ -13,10 +13,11 @@ const useCreateUrl = (
 	tinyUrl: string,
 	setUIError: React.Dispatch<React.SetStateAction<string>>,
 ): iReturnType => {
+	const userId = useCurrentUserId()
 	const queryClient = useQueryClient()
 
 	const { isLoading, mutate } = useMutation({
-		mutationFn: () => createUrl(tinyUrl, url),
+		mutationFn: () => createUrl(userId, tinyUrl, url),
 		onSuccess: () => {
 			queryClient.clear()
 		},

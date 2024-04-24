@@ -21,8 +21,8 @@ app.add_middleware(
 )
 
 @app.get('/my-urls')
-def read_all(limit: int, tiny_url: str):
-    return UrlService.get_all(limit, tiny_url)
+def read_all(user_id: str, limit: int, tiny_url: str):
+    return UrlService.get_all_by_user_id(limit, tiny_url, user_id)
 
 @app.get('/url/{tiny_url}')
 def read_url(tiny_url: str):
@@ -48,7 +48,7 @@ def create_url(variables: UrlEntity):
 
     doc_id = new_hashed_value or hashed_tiny_url
 
-    return UrlService.create(variables.url, variables.tiny_url, doc_id)
+    return UrlService.create(variables.url, variables.tiny_url, doc_id, variables.user_id)
 
 @app.delete('/{tiny_url}')
 def delete_url(tiny_url: str):

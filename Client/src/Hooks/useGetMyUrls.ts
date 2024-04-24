@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import getMyUrls from '../API/getMyUrls'
-import { iUrl } from '../Utils'
+import { iUrl, useCurrentUserId } from '../Utils'
+import { useAuth } from '../Context/AuthContext'
 
 interface iReturnType {
 	urls: iUrl[]
@@ -11,11 +12,14 @@ interface iReturnType {
 const useGetMyUrls = (
 	page: number,
 	tinyUrl: string | undefined
-): iReturnType => { 
+): iReturnType => {
+	const userId = useCurrentUserId()
+
 	const { data, isLoading, isFetching } = useQuery({
 		queryKey: ['urls', page],
-		queryFn: () => getMyUrls(tinyUrl),
-		staleTime: Infinity
+		queryFn: () => getMyUrls(userId, tinyUrl),
+		staleTime: Infinity,
+		enabled: !!userId
 	})
 
 	return { urls: data || [], isLoading, isFetching }

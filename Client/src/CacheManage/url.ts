@@ -1,5 +1,7 @@
 import { QueryClient } from '@tanstack/react-query'
 
+export const URLS_CACHE_KEY = 'urls'
+
 export const removeQueriesFromPage = (page: number, queryClient: QueryClient) => {
 	const queryCache = queryClient.getQueryCache()
 	const allQueryKeys = queryCache.getAll().map(cache => cache.queryKey)

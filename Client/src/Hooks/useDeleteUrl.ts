@@ -1,8 +1,7 @@
 import { UseMutateFunction, useMutation, useQueryClient } from '@tanstack/react-query'
 import deleteUrl from '../API/deleteUrl'
 import { iUrl } from '../Utils'
-import { URLS_CACHE_KEY } from '../AppConfig'
-import { removeQueriesFromPage } from '../CacheManage/url'
+import { URLS_CACHE_KEY, removeQueriesFromPage } from '../CacheManage/url'
 
 const useDeleteUrl = (
 	tinyUrl: string,

@@ -3,7 +3,7 @@ import { Card, Container, Button } from 'react-bootstrap'
 import ActiveForm from './Components/ActiveForm'
 import CompletedForm from './Components/CompletedForm'
 import { useNavigate } from 'react-router-dom'
-import { APP_NAME } from './AppConfig'
+import { APP_NAME } from './Utils'
 
 const App: React.FC = () => {
     const [url, setUrl] = useState<string>('')
