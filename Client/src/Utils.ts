@@ -12,6 +12,7 @@ export const isValidUrl = (urlString: string) => {
 export interface iUrl {
 	tinyUrl: string
 	url: string
+	userId: string
 }
 
 export const APP_NAME = 'SukURL'
