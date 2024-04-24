@@ -1,3 +1,5 @@
+import { useAuth } from './Context/AuthContext'
+
 export const isValidUrl = (urlString: string) => {
 	try {
 		return Boolean(new URL(urlString))
@@ -10,6 +12,14 @@ export const isValidUrl = (urlString: string) => {
 export interface iUrl {
 	tinyUrl: string
 	url: string
+	userId: string
 }
 
-export const MY_URLS_LIMIT_NUM = 5
+export const APP_NAME = 'SukURL'
+
+
+export const useCurrentUserId = () => {
+	const { currentUser } = useAuth()
+
+	return currentUser?.email || ''
+}

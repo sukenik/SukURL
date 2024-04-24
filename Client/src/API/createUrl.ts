@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { iUrl } from '../Utils'
-import { SERVER_URL } from '../AppConfig'
+import { appConfig } from '../AppConfig'
 
-const createUrl = async (tinyUrl: string, url: string): Promise<iUrl> => {
+const createUrl = async (userId: string, tinyUrl: string, url: string): Promise<iUrl> => {
 	const res = await axios.put(
-		SERVER_URL,
-		{ tiny_url: tinyUrl, url }
+		appConfig.serverUrl,
+		{ user_id: userId, tiny_url: tinyUrl, url }
 	)
 
 	return res.data

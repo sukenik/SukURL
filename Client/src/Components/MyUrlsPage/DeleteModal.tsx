@@ -92,7 +92,7 @@ const DeleteModal: React.FC<iProps> = ({ urlToDelete, setUrlToDelete, page }) =>
 				<div style={{ padding: '10px' }}>
 					<p style={modalTitle}>{'Delete URL'}</p>
 					<div style={urlTextContainer}>
-						<div style={{ marginRight: 'auto' }}>{'Sure you want to delete'}</div>
+						<div style={{ marginRight: '2px' }}>{'Sure you want to delete'}</div>
 						<OverflowTooltip title={urlToDelete}>
 							<div style={urlText}>{`"${urlToDelete}`}</div>
 						</OverflowTooltip>

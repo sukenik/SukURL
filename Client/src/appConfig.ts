@@ -1,3 +1,3 @@
-export const SERVER_URL = 'http://localhost:8000'
-export const URLS_CACHE_KEY = 'urls'
-export const APP_NAME = 'SukURL'
+export const appConfig = {
+	serverUrl: 'http://localhost:8000',
+}

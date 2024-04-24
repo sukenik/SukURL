@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Alert, Button, Card, Container } from 'react-bootstrap'
 import { useAuth } from '../Context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { APP_NAME } from '../AppConfig'
+import { APP_NAME } from '../Utils'
 import GoogleLogo from '../../assets/Google.png'
 
 const iconStyle: React.CSSProperties = {

@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { SERVER_URL } from '../AppConfig'
+import { appConfig } from '../AppConfig'
 
 const deleteUrl = async (tinyUrl: string): Promise<void> => {
-	await axios.delete(`${SERVER_URL}/${tinyUrl}`)
+	await axios.delete(`${appConfig.serverUrl}/${tinyUrl}`)
 }
 
 export default deleteUrl
