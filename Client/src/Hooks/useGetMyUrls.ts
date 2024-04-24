@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import getMyUrls from '../API/getMyUrls'
 import { iUrl, useCurrentUserId } from '../Utils'
-import { useAuth } from '../Context/AuthContext'
 
 interface iReturnType {
 	urls: iUrl[]
