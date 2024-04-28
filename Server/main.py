@@ -23,9 +23,9 @@ app.add_middleware(
 
 @app.get('/my-urls')
 def read_all(user_id: str, limit: int, tiny_url: str):
-    urls_with_visits_num = []
-
     urls = UrlService.get_all_by_user_id(limit, tiny_url, user_id)
+
+    urls_with_visits_num = []
 
     for url in urls:
         visits_num = VisitService.get_count_by_url(url['tinyUrl'])
