@@ -4,7 +4,11 @@ import { appConfig } from '../AppConfig'
 
 const MY_URLS_LIMIT_NUM = 5
 
-const getMyUrls = async (userId: string, tinyUrl?: string): Promise<iUrl[]> => {
+export interface iGetMyUrlsReturnType extends iUrl {
+	visitsNum: number
+}
+
+const getMyUrls = async (userId: string, tinyUrl?: string): Promise<iGetMyUrlsReturnType[]> => {
 	const res = await axios.get(
 		`${appConfig.serverUrl}/my-urls?user_id=${userId}&limit=${MY_URLS_LIMIT_NUM}&tiny_url=${tinyUrl}`
 	)

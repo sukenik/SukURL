@@ -23,7 +23,18 @@ app.add_middleware(
 
 @app.get('/my-urls')
 def read_all(user_id: str, limit: int, tiny_url: str):
-    return UrlService.get_all_by_user_id(limit, tiny_url, user_id)
+    urls_with_visits_num = []
+
+    urls = UrlService.get_all_by_user_id(limit, tiny_url, user_id)
+
+    for url in urls:
+        visits_num = VisitService.get_count_by_url(url['tinyUrl'])
+
+        urls_with_visits_num.append({
+            **url, **visits_num
+        })
+
+    return urls_with_visits_num
 
 @app.get('/url/{tiny_url}')
 def read_url(tiny_url: str, request: Request):
@@ -50,7 +61,8 @@ def delete_url(tiny_url: str):
         (f'{tiny_url}').encode()
     ).hexdigest()
 
-    return UrlService.delete(hashed_tiny_url)
+    VisitService.delete_by_url(tiny_url)
+    UrlService.delete(hashed_tiny_url)
 
 @app.get('/favicon.ico', include_in_schema=False)
 def favicon():

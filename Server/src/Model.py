@@ -7,3 +7,4 @@ class UrlEntity(BaseModel):
 
 class VisitEntity(BaseModel):
     fingerprint: str
+    tiny_url: str

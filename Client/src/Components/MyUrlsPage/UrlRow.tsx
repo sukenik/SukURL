@@ -1,11 +1,11 @@
 import React, { CSSProperties } from 'react'
 import { ListGroup } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { iUrl } from '../../Utils'
 import OverflowTooltip from '../OverflowTooltip'
+import { TINY_URL_WIDTH, URL_WIDTH } from './UrlsList'
+import { iGetMyUrlsReturnType } from '../../API/getMyUrls'
 
 const linkWrapper: CSSProperties = {
-	width: '48%',
 	textAlign: 'left',
 	maxHeight: '100px',
 }
@@ -17,13 +17,18 @@ const linkStyles: CSSProperties = {
 	display: 'block'
 }
 
+const deleteIcon: CSSProperties = {
+	cursor: 'pointer',
+	marginLeft: 'auto'
+}
+
 interface iProps {
-	urlEntity: iUrl
+	urlEntity: iGetMyUrlsReturnType
 	handleDeleteUrl: React.Dispatch<React.SetStateAction<string>>
 }
 
 const UrlRow: React.FC<iProps> = ({ urlEntity, handleDeleteUrl }: iProps) => {
-	const { url, tinyUrl } = urlEntity
+	const { url, tinyUrl, visitsNum } = urlEntity
 
 	const handleDelete = () => {
 		handleDeleteUrl(tinyUrl)
@@ -34,17 +39,20 @@ const UrlRow: React.FC<iProps> = ({ urlEntity, handleDeleteUrl }: iProps) => {
 			key={tinyUrl}
 			style={{ display: 'flex' }}
 		>
-			<div style={linkWrapper}>
+			<div style={{ ...linkWrapper, width: TINY_URL_WIDTH }}>
 				<OverflowTooltip title={tinyUrl}>
 					<Link style={linkStyles} target={'_blank'} to={url}>{tinyUrl}</Link>
 				</OverflowTooltip>
 			</div>
-			<div style={{ ...linkWrapper, width: '47%' }}>
+			<div style={{ ...linkWrapper, width: URL_WIDTH }}>
 				<OverflowTooltip title={url}>
 					<Link style={linkStyles} target={'_blank'} to={url}>{url}</Link>
 				</OverflowTooltip>
 			</div>
-			<div style={{ cursor: 'pointer', marginLeft: 'auto' }} onClick={handleDelete}>
+			<div style={{ margin: 'auto' }}>
+				{visitsNum}
+			</div>
+			<div style={deleteIcon} onClick={handleDelete}>
 				<OverflowTooltip title={'Delete url'} showTooltip>
 					<div>{'🗑️'}</div>
 				</OverflowTooltip>

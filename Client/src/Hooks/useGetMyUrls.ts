@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import getMyUrls from '../API/getMyUrls'
-import { iUrl, useCurrentUserId } from '../Utils'
+import getMyUrls, { iGetMyUrlsReturnType } from '../API/getMyUrls'
+import { useCurrentUserId } from '../Utils'
 
 interface iReturnType {
-	urls: iUrl[]
+	urls: iGetMyUrlsReturnType[]
 	isLoading: boolean
 	isFetching: boolean
 }
