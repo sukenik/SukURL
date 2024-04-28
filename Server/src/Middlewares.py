@@ -3,10 +3,10 @@ from urllib.parse import urlparse
 from hashlib import sha256
 from src.schema.URLService import UrlService
 
-def validate_tiny_url(
-    tiny_url: str,
-    hashed_tiny_url: str
-) -> (None | str):
+def validate_tiny_url(tiny_url: str) -> (None | str):
+    hashed_tiny_url = sha256(
+        (f'{tiny_url}').encode()
+    ).hexdigest()
 
     if len(tiny_url) < 5:
         raise HTTPException(status_code=400, detail='The Alias must be at least 5 characters.')
@@ -22,6 +22,8 @@ def validate_tiny_url(
         raise HTTPException(status_code=400, detail='Alias is not available.')
     elif is_duplicate is None:
         return sha256(hashed_tiny_url.encode()).hexdigest()
+    elif is_duplicate is False:
+        return hashed_tiny_url
 
 def validate_url(url: str):
     try:
