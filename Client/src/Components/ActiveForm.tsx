@@ -65,7 +65,8 @@ const ActiveForm: React.FC<iProps> = ({
 				<Form.Label>{'🔗 Shorten a long URL'}</Form.Label>
 				<Form.Control
                     onChange={handleUrlChange}
-                    autoComplete='false'
+                    autoComplete={'false'}
+					placeholder={'Enter long link here'}
                     disabled={isLoading}
                 />
 				{urlError && <Alert className='my-2' variant='danger'>{urlError}</Alert>}
@@ -74,8 +75,8 @@ const ActiveForm: React.FC<iProps> = ({
 				<Form.Label className='mt-2'>{'🪄 Customize your link'}</Form.Label>
 				<Form.Control
 					onChange={handleTinyUrlChange}
-					autoComplete='false'
-					placeholder='Enter alias'
+					autoComplete={'false'}
+					placeholder={'Enter alias'}
                     disabled={isLoading}
 				/>
 				{tinyUrlError && <Alert className='my-2' variant='danger'>{tinyUrlError}</Alert>}
