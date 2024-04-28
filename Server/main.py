@@ -1,8 +1,9 @@
-from fastapi import FastAPI, responses, HTTPException
+from fastapi import FastAPI, responses, HTTPException, Request
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from hashlib import sha256
 from src.schema.URLService import UrlService
+from src.schema.VisitService import VisitService
 from src.Middlewares import validate_tiny_url, validate_url
 from src.Model import UrlEntity
 
@@ -22,13 +23,26 @@ app.add_middleware(
 
 @app.get('/my-urls')
 def read_all(user_id: str, limit: int, tiny_url: str):
-    return UrlService.get_all_by_user_id(limit, tiny_url, user_id)
+    urls = UrlService.get_all_by_user_id(limit, tiny_url, user_id)
+
+    urls_with_visits_num = []
+
+    for url in urls:
+        visits_num = VisitService.get_count_by_url(url['tinyUrl'])
+
+        urls_with_visits_num.append({
+            **url, **visits_num
+        })
+
+    return urls_with_visits_num
 
 @app.get('/url/{tiny_url}')
-def read_url(tiny_url: str):
+def read_url(tiny_url: str, request: Request):
     url_result = UrlService.get_url_by_tiny(tiny_url)
 
     if url_result:
+        VisitService.create(tiny_url, request.headers)
+
         return responses.RedirectResponse(url_result['url'])
     else:
         return HTTPException(status_code=404, detail='URL not found.')
@@ -37,16 +51,7 @@ def read_url(tiny_url: str):
 def create_url(variables: UrlEntity):
     validate_url(variables.url)
 
-    hashed_tiny_url = sha256(
-        (f'{variables.tiny_url}').encode()
-    ).hexdigest()
-
-    new_hashed_value = validate_tiny_url(
-        variables.tiny_url,
-        hashed_tiny_url
-    )
-
-    doc_id = new_hashed_value or hashed_tiny_url
+    doc_id = validate_tiny_url(variables.tiny_url)
 
     return UrlService.create(variables.url, variables.tiny_url, doc_id, variables.user_id)
 
@@ -56,7 +61,8 @@ def delete_url(tiny_url: str):
         (f'{tiny_url}').encode()
     ).hexdigest()
 
-    return UrlService.delete(hashed_tiny_url)
+    VisitService.delete_by_url(tiny_url)
+    UrlService.delete(hashed_tiny_url)
 
 @app.get('/favicon.ico', include_in_schema=False)
 def favicon():
