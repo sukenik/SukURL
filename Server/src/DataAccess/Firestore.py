@@ -1,9 +1,13 @@
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
-from settings import PROJECT_ID
+from firebase_admin import firestore, initialize_app
+from settings import PROJECT_ID, API_KEY, AUTH_DOMAIN, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID
 
-cred = credentials.ApplicationDefault()
+initialize_app(options={
+	'apiKey': API_KEY,
+	'authDomain': AUTH_DOMAIN,
+	'projectId': PROJECT_ID,
+	'storageBucket': STORAGE_BUCKET,
+	'messagingSenderId': MESSAGING_SENDER_ID,
+	'appId': APP_ID
+})
 
-firebase_admin.initialize_app(cred, { 'projectId': PROJECT_ID })
 db = firestore.client()
