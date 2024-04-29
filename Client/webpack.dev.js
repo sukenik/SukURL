@@ -8,9 +8,6 @@ module.exports = merge(common, {
 	devServer: {
 		static: './dist',
 		port: 3000,
-		open: true,
-		hot: true,
-		historyApiFallback: true
 	},
 	plugins: [
 		new Dotenv({
