@@ -3,5 +3,5 @@ pyvenv.cfg
 Scripts/
 Include/
 Lib/
-.env
+*.env
 *.sh
