@@ -9,7 +9,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import PrivateRoute from './Components/PrivateRoute'
 import LoginPage from './Components/LoginPage'
 import { AuthProvider } from './Context/AuthContext'
-import { appConfig } from './AppConfig'
+import { appConfig } from './appConfig'
 
 const queryClient = new QueryClient()
 

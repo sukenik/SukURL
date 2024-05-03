@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { iUrl } from '../Utils'
-import { appConfig } from '../AppConfig'
+import { appConfig } from '../appConfig'
 
 const createUrl = async (userId: string, tinyUrl: string, url: string): Promise<iUrl> => {
 	const res = await axios.put(
