@@ -9,10 +9,12 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import PrivateRoute from './Components/PrivateRoute'
 import LoginPage from './Components/LoginPage'
 import { AuthProvider } from './Context/AuthContext'
+import { appConfig } from './AppConfig'
 
 const queryClient = new QueryClient()
 
 const root = document.getElementById('root')
+
 render(
 	<QueryClientProvider client={queryClient}>
 		<AuthProvider>
@@ -23,7 +25,10 @@ render(
 					<Route path='/login' element={<LoginPage />} />
 				</Routes>
 			</Router>
-			<ReactQueryDevtools initialIsOpen={false} />
+			{
+				appConfig.isDevEnv &&
+				<ReactQueryDevtools initialIsOpen={false} />
+			}
 		</AuthProvider>
 	</QueryClientProvider>,
 	root
