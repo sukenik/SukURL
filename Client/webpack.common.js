@@ -13,6 +13,7 @@ module.exports = {
             excludeWarnings: false,
         }),
         new HtmlWebpackPlugin({
+            // TODO:
             // favicon: 'Assets/favicon.ico',
             template: 'public/index.html',
             hash: true,
