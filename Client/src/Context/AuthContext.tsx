@@ -1,6 +1,6 @@
 import { GoogleAuthProvider, User, UserCredential, signInWithPopup } from 'firebase/auth'
 import React, { useContext, useEffect, useState } from 'react'
-import { auth } from '../Firebase'
+import auth from '../Firebase'
 
 interface iAuthContext {
     currentUser: User | null
