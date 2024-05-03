@@ -6,16 +6,17 @@ from src.schema.URLService import UrlService
 from src.schema.VisitService import VisitService
 from src.Middlewares import validate_tiny_url, validate_url
 from src.Model import UrlEntity
+from settings import ALLOWED_ORIGIN
 
 load_dotenv()
 
 app = FastAPI()
 
-origins = ['*']
+origins = ALLOWED_ORIGIN or '*'
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[origins],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
