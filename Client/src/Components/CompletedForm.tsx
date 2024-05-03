@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Button, Alert } from 'react-bootstrap'
-import { appConfig } from '../AppConfig'
+import { appConfig } from '../appConfig'
 import OverflowTooltip from './OverflowTooltip'
 
 const textStyle: React.CSSProperties = {

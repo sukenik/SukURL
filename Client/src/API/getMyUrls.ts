@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { iUrl } from '../Utils'
-import { appConfig } from '../AppConfig'
+import { appConfig } from '../appConfig'
 
 const MY_URLS_LIMIT_NUM = 5
 
