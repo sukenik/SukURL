@@ -7,10 +7,17 @@ from src.schema.VisitService import VisitService
 from src.Middlewares import validate_tiny_url, validate_url
 from src.Model import UrlEntity
 from settings import ALLOWED_ORIGIN
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 load_dotenv()
 
 app = FastAPI()
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 origins = ALLOWED_ORIGIN or '*'
 
@@ -23,7 +30,8 @@ app.add_middleware(
 )
 
 @app.get('/my-urls')
-def read_all(user_id: str, limit: int, tiny_url: str):
+@limiter.limit('5/minute')
+def read_all(request: Request, user_id: str, limit: int, tiny_url: str):
     urls = UrlService.get_all_by_user_id(limit, tiny_url, user_id)
 
     urls_with_visits_num = []
@@ -38,6 +46,7 @@ def read_all(user_id: str, limit: int, tiny_url: str):
     return urls_with_visits_num
 
 @app.get('/url/{tiny_url}')
+@limiter.limit('5/minute')
 def read_url(tiny_url: str, request: Request):
     url_result = UrlService.get_url_by_tiny(tiny_url)
 
@@ -49,7 +58,8 @@ def read_url(tiny_url: str, request: Request):
         return HTTPException(status_code=404, detail='URL not found.')
 
 @app.put('/')
-def create_url(variables: UrlEntity):
+@limiter.limit('5/minute')
+def create_url(request: Request, variables: UrlEntity):
     validate_url(variables.url)
 
     doc_id = validate_tiny_url(variables.tiny_url)
@@ -57,16 +67,11 @@ def create_url(variables: UrlEntity):
     return UrlService.create(variables.url, variables.tiny_url, doc_id, variables.user_id)
 
 @app.delete('/{tiny_url}')
-def delete_url(tiny_url: str):
+@limiter.limit('5/minute')
+def delete_url(request: Request, tiny_url: str):
     hashed_tiny_url = sha256(
         (f'{tiny_url}').encode()
     ).hexdigest()
 
     VisitService.delete_by_url(tiny_url)
     UrlService.delete(hashed_tiny_url)
-
-@app.get('/favicon.ico', include_in_schema=False)
-def favicon():
-    file_path = 'favicon.ico'
-
-    return responses.FileResponse(file_path)
